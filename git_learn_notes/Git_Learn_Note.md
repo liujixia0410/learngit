@@ -115,14 +115,16 @@ Git仓库建好了，而且是一个空的仓库（empty Git repository）.
 将学习笔记《Git_Learn_Note.md》放到版本控制目录下，即"/z/Git/learngit"下面，子目录也行
 <font color="blue">我建了子目录，实际放在"/z/Git/learngit/git_learn_notes"</font>
 
-- 第一步，使用 **"git add"** 命令，把文件添加到Git仓库
+- ***git add***
+第一步，使用 ***git add*** 命令，把文件添加到Git仓库
 这步执行之后，是没有任何提示的
 
 ```bash
 $git add Git_Learn_Note.md
 ```
 
-- 第二步，使用 **"git commit"** 命令，把文件提交到Git仓库
+- ***git commit***
+第二步，使用 ***git commit*** 命令，把文件提交到Git仓库
 
 ```bash
 $ git commit -m "First Git Learn, it's my git learning note."
@@ -131,7 +133,7 @@ $ git commit -m "First Git Learn, it's my git learning note."
  create mode 100644 git_learn_notes/Git_Learn_Note.md
 ```
 
-***<u>"git add & commit"说明：***
+***<u>"git add & git commit"说明：***
 
 - *git commit 的"-m"后面，是本次提交的说明，commont*
 - *git commit命令执行成功后会告诉你*
@@ -153,40 +155,28 @@ nothing to commit
 
 可以用来查看接受Git管理的文件的修改状态，以及比较修改内容
 
-- git status
+- ***git status***
 用于查看文件修改的状态，当前Git_Learn_Note.md已经被修改过，我们通过 **git status** 看看会告诉我们什么？
 
-```bash
-$ git status
-On branch master
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-        modified:   Git_Learn_Note.md
-
-no changes added to commit (use "git add" and/or "git commit -a")
-```
+![image](.\image\git_status_01.png)
 
 **git status**命令可以让我们时刻掌握仓库当前的状态，上面的命令输出告诉我们，Git_Learn_Note.md被修改过了(modified:   Git_Learn_Note.md)，但还没有准备提交的修改(no changes added to commit)。
 
-- git diff
+- ***git diff***
 虽然Git告诉我们Git_Learn_Note.md被修改了，但如果能看看具体修改了什么内容，自然是很好的。比如你休假两周从国外回来，第一天上班时，已经记不清上次怎么修改的Git_Learn_Note.md，所以，需要用git diff这个命令看看：
 
-```bash
-$ git diff Git_Learn_Note.md
-diff --git a/git_learn_notes/Git_Learn_Note.md b/git_learn_notes/Git_Learn_Note.md
-index a029ca5..efc817d 100644
---- a/git_learn_notes/Git_Learn_Note.md
-+++ b/git_learn_notes/Git_Learn_Note.md
-@@ -169,11 +169,12 @@ no changes added to commit (use "git add" and/or "git commit -a")
+![image](.\image\git_diff_01.png)
 
--### Q&A
-+### Q&A 疑难解答
-```
+**git diff** 顾名思义就是查看difference，显示的格式是Unix通用的diff格式，可以从上面的命令输出看到，我们在第186行删除了“疑难解答”四个字。
+
+- ***对于修改的提交***
+  - 参考 "3.2.1 add & commit" 章节
+  - 1、git add
+  - 2、git commit
 
 ## 附录
 
-### Q&A 疑难解答
+### Q&A
 
 - ***不在Git仓库管理目录内执行***
   - Q：输入**git add Git_Learn_Note.md**，得到错误：fatal: not a git repository (or any of the parent directories)。
