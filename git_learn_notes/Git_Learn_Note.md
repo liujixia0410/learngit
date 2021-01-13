@@ -151,7 +151,7 @@ Initial commit
 nothing to commit
 ```
 
-#### 3.2.1 status & diff
+#### 3.2.2 status & diff
 
 可以用来查看接受Git管理的文件的修改状态，以及比较修改内容
 
@@ -173,6 +173,74 @@ nothing to commit
   - 参考 "3.2.1 add & commit" 章节
   - 1、git add
   - 2、git commit
+
+#### 3.2.3 log & reset & reflog（版本回退）
+
+版本回退需要根据提交本版的日志情况，确定回退到以前的某个版本。
+
+- ***git log***
+在实际工作中，我们肯定记不住每次都改了什么内容，所以我们用**git log**命令查看：
+
+```bash
+$ git log
+commit 0471539bc0556b48a3371101fd98c17aabb0480e (HEAD -> master)
+Author: Liujx <liujx@dce.com.cn>
+Date:   Wed Jan 13 10:36:10 2021 +0800
+
+    Git Learning note: modified Git_learn_note.md
+
+commit 47fb0e319187d32e1b2796080911f44e6d41a91c
+Author: Liujx <liujx@dce.com.cn>
+Date:   Wed Jan 13 10:35:19 2021 +0800
+
+    Git Learning note: add images & modified Git_learn_note.md
+
+commit bbd52530c96650b49f27a14b6a09457bb8c528e1
+Author: Liujx <liujx@dce.com.cn>
+Date:   Wed Jan 13 10:11:10 2021 +0800
+
+    My git learning note, git diff
+
+commit 5284557de44e9f0efc6a932a3a1b81de55dd7bd6
+Author: Liujx <liujx@dce.com.cn>
+Date:   Mon Jan 11 21:36:09 2021 +0800
+
+    Git learn: add commit status diff
+
+commit d8ca75e78a1c7b06fcadd2bcc4fefdd7a9856c03
+Author: Liujx <liujx@dce.com.cn>
+Date:   Mon Jan 11 20:38:41 2021 +0800
+
+    First Git Learn, it's my git learning note.
+```
+
+**git log**命令显示从最近到最远的提交日志，我们可以看到5次提交，最近的一次是 ***Git Learning note: modified Git_learn_note.md***，上一次是 ***Git Learning note: add images & modified Git_learn_note.md***，最早的一次是 ***First Git Learn, it's my git learning note.*** 。
+
+如果嫌输出信息太多，看得眼花缭乱的，可以试试加上 **--pretty=oneline** 参数：
+
+```bash
+$ git log --pretty=oneline
+0471539bc0556b48a3371101fd98c17aabb0480e (HEAD -> master) Git Learning note: modified Git_learn_note.md
+47fb0e319187d32e1b2796080911f44e6d41a91c Git Learning note: add images & modified Git_learn_note.md
+bbd52530c96650b49f27a14b6a09457bb8c528e1 My git learning note, git diff
+5284557de44e9f0efc6a932a3a1b81de55dd7bd6 Git learn: add commit status diff
+d8ca75e78a1c7b06fcadd2bcc4fefdd7a9856c03 First Git Learn, it's my git learning note.
+```
+
+<font color="green">友情提示:
+你看到的一大串类似0471539bc...的是commit id（版本号），和SVN不一样，Git的commit id不是1，2，3……递增的数字，而是一个SHA1计算出来的一个非常大的数字，用十六进制表示，而且你看到的commit id和我的肯定不一样，以你自己的为准。
+为什么commit id需要用这么一大串数字表示呢？因为Git是分布式的版本控制系统，后面我们还要研究多人在同一个版本库里工作，如果大家都用1，2，3……作为版本号，那肯定就冲突了。</font>
+
+- ***git reset***
+版本回退时，Git必须知道当前版本是哪个版本，在Git中，用HEAD表示当前版本，也就是最新的提交0471539bc...（注意我的提交ID和你的肯定不一样），上一个版本就是<font color="orange">HEAD\^</font>，上上一个版本就是<font color="orange">HEAD\^\^</font>，当然往上100个版本写100个\^是数不过来的，所以写成<font color="orange">HEAD~100</font>。
+
+  - 回退上一版本
+为了演示更加清晰，新建一个文件gitversion.txt，文件内容就1行"1st version."。
+
+  - 回退某个版本
+
+
+- ***git reflog***
 
 ## 附录
 
