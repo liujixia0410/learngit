@@ -169,11 +169,24 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 **git status**命令可以让我们时刻掌握仓库当前的状态，上面的命令输出告诉我们，Git_Learn_Note.md被修改过了(modified:   Git_Learn_Note.md)，但还没有准备提交的修改(no changes added to commit)。
 
-虽然Git告诉我们readme.txt被修改了，但如果能看看具体修改了什么内容，自然是很好的。比如你休假两周从国外回来，第一天上班时，已经记不清上次怎么修改的readme.txt，所以，需要用git diff这个命令看看：
+- git diff
+虽然Git告诉我们Git_Learn_Note.md被修改了，但如果能看看具体修改了什么内容，自然是很好的。比如你休假两周从国外回来，第一天上班时，已经记不清上次怎么修改的Git_Learn_Note.md，所以，需要用git diff这个命令看看：
+
+```bash
+$ git diff Git_Learn_Note.md
+diff --git a/git_learn_notes/Git_Learn_Note.md b/git_learn_notes/Git_Learn_Note.md
+index a029ca5..efc817d 100644
+--- a/git_learn_notes/Git_Learn_Note.md
++++ b/git_learn_notes/Git_Learn_Note.md
+@@ -169,11 +169,12 @@ no changes added to commit (use "git add" and/or "git commit -a")
+
+-### Q&A
++### Q&A 疑难解答
+```
 
 ## 附录
 
-### Q&A
+### Q&A 疑难解答
 
 - ***不在Git仓库管理目录内执行***
   - Q：输入**git add Git_Learn_Note.md**，得到错误：fatal: not a git repository (or any of the parent directories)。
