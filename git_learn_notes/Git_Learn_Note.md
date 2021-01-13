@@ -348,7 +348,9 @@ drwxr-xr-x 1 lenovo 197121     0  1月 13 10:42 image/
 
 Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，还有Git为我们自动创建的第一个分支master，以及指向master的一个指针叫HEAD。
 （分支和HEAD的概念后面再说）
+
 ![image](.\image\git_repository.png)
+
 前面讲了我们把文件往Git版本库里添加的时候，是分两步执行的：
 第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区；
 第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
@@ -367,49 +369,65 @@ Git has a mutable index called stage.
 
 先用git status查看一下状态：
 
+```bash
 $ git status
 On branch master
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
-
-	modified:   readme.txt
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   gitversion.txt
 
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
-
-	LICENSE
+        git_test.txt
 
 no changes added to commit (use "git add" and/or "git commit -a")
-Git非常清楚地告诉我们，readme.txt被修改了，而LICENSE还从来没有被添加过，所以它的状态是Untracked。
+```
 
-现在，使用两次命令git add，把readme.txt和LICENSE都添加后，用git status再查看一下：
+Git非常清楚地告诉我们，gitversion.txt被修改了，而git_test.txt还从来没有被添加过，所以它的状态是Untracked。
 
+现在，使用两次命令git add，把gitversion.txt和git_test.txt都添加后，用git status再查看一下：
+
+```bash
 $ git status
 On branch master
 Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
+  (use "git restore --staged <file>..." to unstage)
+        new file:   git_test.txt
+        modified:   gitversion.txt
+```
 
-	new file:   LICENSE
-	modified:   readme.txt
 现在，暂存区的状态就变成这样了：
 
-git-stage
+![image](.\image\git_stage.png)
 
-所以，git add命令实际上就是把要提交的所有修改放到暂存区（Stage），然后，执行git commit就可以一次性把暂存区的所有修改提交到分支。
+所以，***git add*** 命令实际上就是把要提交的所有修改放到 **暂存区（Stage）**，然后，执行 ***git commit*** 就可以一次性把暂存区的所有修改提交到分支。
 
-$ git commit -m "understand how stage works"
-[master e43a48b] understand how stage works
- 2 files changed, 2 insertions(+)
- create mode 100644 LICENSE
+```bash
+$ git commit -m "Git learn: stage"
+[master 4af1b44] Git learn: stage
+ 2 files changed, 1 insertion(+)
+ create mode 100644 git_learn_notes/git_test.txt
+```
+
 一旦提交后，如果你又没有对工作区做任何修改，那么工作区就是“干净”的：
 
+```bash
 $ git status
 On branch master
 nothing to commit, working tree clean
+```
+
 现在版本库变成了这样，暂存区就没有任何内容了：
 
-git-stage-after-commit
+![image](.\image\git_stage_after_commit.png)
+
+- **管理修改**
+
+**问：为什么Git比其他版本控制系统设计得优秀？**
+**答：因为Git跟踪并管理的是<font color="red">修改</font>，而非文件。任何增删改，都是修改**
+
+我们做一个实验，看看Git是如何管理修改，而不是管理文件的。
 
 ## 附录
 
