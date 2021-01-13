@@ -1,1 +1,2 @@
 1st version. 2nd version. 3th version.
+Git has a mutable index called stage.
