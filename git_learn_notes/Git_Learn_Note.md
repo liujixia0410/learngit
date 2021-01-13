@@ -228,19 +228,188 @@ d8ca75e78a1c7b06fcadd2bcc4fefdd7a9856c03 First Git Learn, it's my git learning n
 ```
 
 <font color="green">友情提示:
-你看到的一大串类似0471539bc...的是commit id（版本号），和SVN不一样，Git的commit id不是1，2，3……递增的数字，而是一个SHA1计算出来的一个非常大的数字，用十六进制表示，而且你看到的commit id和我的肯定不一样，以你自己的为准。
-为什么commit id需要用这么一大串数字表示呢？因为Git是分布式的版本控制系统，后面我们还要研究多人在同一个版本库里工作，如果大家都用1，2，3……作为版本号，那肯定就冲突了。</font>
+你看到的一大串类似0471539bc...的是commit_id（版本号），和SVN不一样，Git的commit_id不是1，2，3……递增的数字，而是一个SHA1计算出来的一个非常大的数字，用十六进制表示，而且你看到的commit_id和我的肯定不一样，以你自己的为准。
+为什么commit_id需要用这么一大串数字表示呢？因为Git是分布式的版本控制系统，后面我们还要研究多人在同一个版本库里工作，如果大家都用1，2，3……作为版本号，那肯定就冲突了。</font>
 
 - ***git reset***
 版本回退时，Git必须知道当前版本是哪个版本，在Git中，用HEAD表示当前版本，也就是最新的提交0471539bc...（注意我的提交ID和你的肯定不一样），上一个版本就是<font color="orange">HEAD\^</font>，上上一个版本就是<font color="orange">HEAD\^\^</font>，当然往上100个版本写100个\^是数不过来的，所以写成<font color="orange">HEAD~100</font>。
 
-  - 回退上一版本
-为了演示更加清晰，新建一个文件gitversion.txt，文件内容就1行"1st version."。
+***回退上一版本***
+为了演示更加清晰，新建一个文件gitversion.txt，然后进行两次修改提交，总共三个版本，内容分别如下（参考git log模式，时间从后往前排列）：
+版本3：1st version. 2nd version. 3th version.
+版本2：1st version. 2nd version.
+版本1：1st version.
 
-  - 回退某个版本
+```bash
+$ git log --pretty=oneline
+a766f4ae555cd9a4a8b9e141da582f1a27ef9ab7 (HEAD -> master) modify gitversion.txt 3th
+92a45b1e176eaf979f95935a8c657215e367a787 modify gitversion.txt 2nd
+8b59c8d2deb541ee00baae115c512ac27c44bef7 add gitversion.txt
+```
 
+从上述log内容看，新建了一个文件，并且修改了两次，当前最新版本是a766f4a...，我们要回退到上一版本92a45b1...，可以通过如下操作执行：
+
+```bash
+$ git reset --hard HEAD^
+HEAD is now at 92a45b1 modify gitversion.txt 2nd
+
+$ cat gitversion.txt
+1st version. 2nd version.
+
+$ git log --pretty=oneline
+92a45b1e176eaf979f95935a8c657215e367a787 (HEAD -> master) modify gitversion.txt 2nd
+8b59c8d2deb541ee00baae115c512ac27c44bef7 add gitversion.txt
+```
+
+通过上述操作看到，果然回退到上一个版本了，并且通过 ***git log*** 看到当前最新版本的commit_id已经是92a45b1...了。
+
+***回退任意版本***
+
+但是，又想回到之前的最后一个版本a766f4a...怎么办？
+只要窗口没关掉，或者你能通过任何方法找到版本的commit_id，就可以通过下面的方式，回到某个具体版本。
+*<u>版本号没必要写全，前几位就可以了，Git会自动去找。当然也不能只写前一两位，因为Git可能会找到多个版本号，就无法确定是哪一个了。</u>*
+
+```bash
+$ git reset --hard a766f4a
+HEAD is now at a766f4a modify gitversion.txt 3th
+
+$ cat gitversion.txt
+1st version. 2nd version. 3th version.
+
+$ git log --pretty=oneline
+a766f4ae555cd9a4a8b9e141da582f1a27ef9ab7 (HEAD -> master) modify gitversion.txt 3th
+92a45b1e176eaf979f95935a8c657215e367a787 modify gitversion.txt 2nd
+8b59c8d2deb541ee00baae115c512ac27c44bef7 add gitversion.txt
+```
 
 - ***git reflog***
+
+上述提到的“只要窗口没关掉”，目的是为了找到某个版本的commit_id，只要能找到这个commit_id，窗口关掉几次都没关系，一样可以回退。但是窗口关掉之后，如何找到commit_id呢？
+
+```bash
+$ git reflog
+a766f4a (HEAD -> master) HEAD@{0}: reset: moving to a766f4a
+92a45b1 HEAD@{1}: reset: moving to HEAD^
+a766f4a (HEAD -> master) HEAD@{2}: commit: modify gitversion.txt 3th
+92a45b1 HEAD@{3}: commit: modify gitversion.txt 2nd
+8b59c8d HEAD@{4}: commit: add gitversion.txt
+```
+
+Git提供了一个命令 ***git reflog*** 用来记录你每一次执行的命令，有了这个，放心回退吧。
+
+- ***git版本回退原理***
+
+Git的版本回退速度非常快，因为Git在内部有个指向当前版本的HEAD指针，当你回退版本的时候，Git仅仅是把HEAD从指向到某个版本：
+
+┌────┐
+│HEAD│
+└────┘
+   └──> ○ modify gitversion.txt 3th
+　　　│
+　　　○ modify gitversion.txt 2nd
+　　　│
+　　　○ add gitversion.txt
+
+改为指向 modify gitversion.txt 2nd：
+
+┌────┐
+│HEAD│
+└────┘
+   │　　○ append GPL
+   │　　│
+   └──> ○ add distributed
+　　　│
+　　　○ wrote a readme file
+
+然后顺便把工作区的文件更新了。所以你让HEAD指向哪个版本号，你就把当前版本定位在哪。
+
+#### 3.2.4 工作区和暂存区
+
+- **工作区（Working Directory）**
+就是在电脑里能看到的目录，比如我的learngit文件夹就是一个工作区：
+
+```bash
+$ cd /z/Git/learngit
+$ ll
+total 0
+drwxr-xr-x 1 lenovo 197121 0  1月 13 14:59 git_learn_notes/
+
+$ cd git_learn_notes
+$ ll
+total 17
+-rw-r--r-- 1 lenovo 197121 14170  1月 13 16:18 Git_Learn_Note.md
+-rw-r--r-- 1 lenovo 197121    40  1月 13 14:59 gitversion.txt
+drwxr-xr-x 1 lenovo 197121     0  1月 13 10:42 image/
+```
+
+- **版本库（Repository）& 暂存区（stage）**
+
+工作区有一个隐藏目录 *.git*，这个不算工作区，而是Git的版本库。
+
+Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，还有Git为我们自动创建的第一个分支master，以及指向master的一个指针叫HEAD。
+（分支和HEAD的概念后面再说）
+![image](.\image\git_repository.png)
+前面讲了我们把文件往Git版本库里添加的时候，是分两步执行的：
+第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区；
+第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
+
+因为我们创建Git版本库时，Git自动为我们创建了唯一一个master分支，所以，现在，git commit就是往master分支上提交更改。
+你可以简单理解为，需要提交的文件修改通通放到暂存区，然后，一次性提交暂存区的所有修改。
+
+我们再练习一遍，先对gitversion.txt做个修改，比如加上一行内容：
+
+```txt
+1st version. 2nd version. 3th version.
+Git has a mutable index called stage.
+```
+
+然后，在工作区新增一个git_test.txt文本文件（内容随便写）。
+
+先用git status查看一下状态：
+
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   readme.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	LICENSE
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Git非常清楚地告诉我们，readme.txt被修改了，而LICENSE还从来没有被添加过，所以它的状态是Untracked。
+
+现在，使用两次命令git add，把readme.txt和LICENSE都添加后，用git status再查看一下：
+
+$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	new file:   LICENSE
+	modified:   readme.txt
+现在，暂存区的状态就变成这样了：
+
+git-stage
+
+所以，git add命令实际上就是把要提交的所有修改放到暂存区（Stage），然后，执行git commit就可以一次性把暂存区的所有修改提交到分支。
+
+$ git commit -m "understand how stage works"
+[master e43a48b] understand how stage works
+ 2 files changed, 2 insertions(+)
+ create mode 100644 LICENSE
+一旦提交后，如果你又没有对工作区做任何修改，那么工作区就是“干净”的：
+
+$ git status
+On branch master
+nothing to commit, working tree clean
+现在版本库变成了这样，暂存区就没有任何内容了：
+
+git-stage-after-commit
 
 ## 附录
 
@@ -252,3 +421,15 @@ d8ca75e78a1c7b06fcadd2bcc4fefdd7a9856c03 First Git Learn, it's my git learning n
 - ***文件不存在***
   - Q：输入**git add Git_Learn_Note.md**，得到错误fatal: pathspec 'Git_Learn_Note.md' did not match any files。
   - A：添加某个文件时，该文件必须在当前目录下存在。
+
+### Git命令列表
+
+|Commond|说明|
+|---|---|
+|git add [file_name]|添加一个文件到Git，无论是新文件还是修改文件，都需要通过add之后，才能commit|
+|git commit|将git add之后的文件，全部提交，并产生新的commit_id<br>-m "[comment]"：提交时，添加日志<br>-a [file_name]：讲一个没有add的文件，同时执行add和commit|
+|git status|查看Git所管理的文件状态，包括哪些没有add，哪些add没有提交，哪些是新建文件，哪些是修改文件等|
+|git diff|查看当前修改与Git当前版本之间的差异|
+|git log|查看Git管理下的所有日志<br>--pretty=oneline：该参数简化log显示为同一行，方便查看|
+|git reset [commit_id]|版本回退|
+|git reflog|查看Git管理下所有被记录的操作|
