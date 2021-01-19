@@ -422,12 +422,84 @@ nothing to commit, working tree clean
 
 ![image](.\image\git_stage_after_commit.png)
 
-- **管理修改**
+#### 3.2.5 管理修改
 
 **问：为什么Git比其他版本控制系统设计得优秀？**
 **答：因为Git跟踪并管理的是<font color="red">修改</font>，而非文件。任何增删改，都是修改**
 
 我们做一个实验，看看Git是如何管理修改，而不是管理文件的。
+
+第一步，对gitversion.txt添加一行(Git tracks changes.)：
+
+```txt
+1st version. 2nd version. 3th version.
+Git has a mutable index called stage.
+Git tracks changes.
+```
+
+第二步，***git add*** 将第一次修改放入暂存区
+
+```bash
+$ git add gitversion.txt
+$ git status
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   gitversion.txt
+```
+
+第三步，再次修改gitversion.txt，再添加一行(Git tracks changes of files 2nd.)
+
+```txt
+1st version. 2nd version. 3th version.
+Git has a mutable index called stage.
+Git tracks changes.
+Git tracks changes of files 2nd.
+```
+
+第四步，***git commit***，然后 ***git status*** 再看状态
+
+```bash
+$ git commit -m "Git test: git tracks changes"
+[master 652163d] Git test: git tracks changes
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   gitversion.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+至此，你会发现，**第二次修改没有被提交！第二次修改没有被提交！第二次修改没有被提交！**
+
+原因如下：
+第一次修改 -> ***git add*** -> 第二次修改 -> ***git commit***
+
+你看，前面提到了Git管理的是修改，当使用 ***git add*** 命令后，在工作区的第一次修改被放入暂存区，准备提交，但是，在工作区的第二次修改并没有放入暂存区，所以，***git commit*** 只负责把暂存区的修改提交了，也就是第一次的修改被提交了，第二次的修改不会被提交。
+
+提交后，用 ***git diff*** 命令可以查看工作区和版本库里面最新版本的区别，可见，第二次修改确实没有被提交。
+
+```bash
+$ git diff
+diff --git a/git_learn_notes/gitversion.txt b/git_learn_notes/gitversion.txt
+index 42b2849..fd43f3f 100644
+--- a/git_learn_notes/gitversion.txt
++++ b/git_learn_notes/gitversion.txt
+@@ -1,3 +1,4 @@
+ 1st version. 2nd version. 3th version.
+ Git has a mutable index called stage.
+-Git tracks changes.
+\ No newline at end of file
++Git tracks changes.
++Git tracks changes of files 2nd.
+\ No newline at end of file
+```
+
+#### 3.2.6 撤销修改
 
 ## 附录
 
