@@ -110,7 +110,7 @@ Git仓库建好了，而且是一个空的仓库（empty Git repository）.
 
 ### 3.2 版本管理
 
-#### 3.2.1 add & commit
+#### 3.2.1 git add & git commit
 
 将学习笔记《Git_Learn_Note.md》放到版本控制目录下，即"/z/Git/learngit"下面，子目录也行
 <font color="blue">我建了子目录，实际放在"/z/Git/learngit/git_learn_notes"</font>
@@ -151,7 +151,7 @@ Initial commit
 nothing to commit
 ```
 
-#### 3.2.2 status & diff
+#### 3.2.2 git status & git diff
 
 可以用来查看接受Git管理的文件的修改状态，以及比较修改内容
 
@@ -174,7 +174,7 @@ nothing to commit
   - 1、git add
   - 2、git commit
 
-#### 3.2.3 log & reset & reflog（版本回退）
+#### 3.2.3 git log & git reset & git reflog（版本回退）
 
 版本回退需要根据提交本版的日志情况，确定回退到以前的某个版本。
 
@@ -499,7 +499,126 @@ index 42b2849..fd43f3f 100644
 \ No newline at end of file
 ```
 
-#### 3.2.6 撤销修改
+#### 3.2.6 撤销修改 git restore
+
+撤销修改分为两类
+
+1. 撤销 ***git add*** 之前的修改内容
+2. 撤销 ***git add*** 之后，还未 ***git commit*** 的修改内容
+
+- **git add 之前 撤销**
+
+先对gitversion.txt进行修改，添加一行"Git undo change before add."。
+
+```bash
+$ cat gitversion.txt
+1st version. 2nd version. 3th version.
+Git has a mutable index called stage.
+Git tracks changes.
+Git tracks changes of files 2nd.
+Git undo change before add.
+```
+
+通过 ***git status*** 查看当前状态
+
+```bash
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   gitversion.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+我们会发现，Git告诉我们，"git restore \<file\>..."可以丢弃工作区的修改，尝试一下：
+
+```bash
+$ git restore gitversion.txt
+
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+$ cat gitversion.txt
+1st version. 2nd version. 3th version.
+Git has a mutable index called stage.
+Git tracks changes.
+Git tracks changes of files 2nd.
+```
+
+命令 ***git restore gitversion.txt*** 意思就是，把gitversion.txt文件在工作区的修改全部撤销，这里有两种情况：
+一种是gitversion.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+一种是gitversion.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+
+总之，就是让这个文件回到最近一次 ***git commit*** 或 ***git add*** 时的状态。
+从上述输出看，文件内容果然复原了。
+
+- **git add 之后 撤销**
+
+如果修改后执行了 ***git add*** 怎么办？我们再来操作一下。
+先添加一句话"Git undo change after add."，再执行 ***git add***；
+执行 ***git commit*** 之前，我们发现这句话错了，***git status***看一下，发现修改只是添加到暂存区，还未提交。
+
+```bash
+$ cat gitversion.txt
+1st version. 2nd version. 3th version.
+Git has a mutable index called stage.
+Git tracks changes.
+Git tracks changes of files 2nd.
+Git undo change after add.
+
+$ git add gitversion.txt
+
+$ git status
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   gitversion.txt
+```
+
+我们发现，Git同样告诉我们，用命令"git restore --staged \<file\>..."可以把暂存区的修改撤销掉（unstage），重新放回工作区，我们尝试一下：
+
+```bash
+$ git restore --staged gitversion.txt
+
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   gitversion.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+$ cat gitversion.txt
+1st version. 2nd version. 3th version.
+Git has a mutable index called stage.
+Git tracks changes.
+Git tracks changes of files 2nd.
+Git undo change after add.
+```
+
+我们可以看到，暂存区干净了，工作区还存在文件修改，查看一下文件内容，"Git undo change after add."这句不该存在的内容确实还在。
+
+接下来呢，按照“撤销 ***git add*** 之前的修改”在操作一次就行了。
+
+```bash
+$ git restore gitversion.txt
+
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+$ cat gitversion.txt
+1st version. 2nd version. 3th version.
+Git has a mutable index called stage.
+Git tracks changes.
+Git tracks changes of files 2nd.
+```
+
+到这里，全干净了，***git status***什么也没有了，查看文件内容，"Git undo change after add."这句确实不存在了，一切都回到了原点。
 
 ## 附录
 
