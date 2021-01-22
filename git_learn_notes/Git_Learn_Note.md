@@ -771,7 +771,6 @@ $ git commit -m "Git learn: git push"
  1 file changed, 82 insertions(+)
 
 $ git push origin master
-Logon failed, use ctrl+c to cancel basic credential prompt.
 warning: redirecting to https://github.com/liujixia0410/learngit.git/
 Enumerating objects: 7, done.
 Counting objects: 100% (7/7), done.
@@ -783,28 +782,12 @@ remote: Resolving deltas: 100% (1/1), completed with 1 local object.
 To http://github.com/liujixia0410/learngit.git
    3fb1270..8f497b1  master -> master
 
-lenovo@LAPTOP-1AA97L52 MINGW64 /z/Git/learngit/git_learn_notes (master)
 $ git status
 On branch master
 Your branch is up to date with 'origin/master'.
 
 nothing to commit, working tree clean
 ```
-
-SSH警告
-当你第一次使用Git的clone或者push命令连接GitHub时，会得到一个警告：
-
-The authenticity of host 'github.com (xx.xx.xx.xx)' can't be established.
-RSA key fingerprint is xx.xx.xx.xx.xx.
-Are you sure you want to continue connecting (yes/no)?
-这是因为Git使用SSH连接，而SSH连接在第一次验证GitHub服务器的Key时，需要你确认GitHub的Key的指纹信息是否真的来自GitHub的服务器，输入yes回车即可。
-
-Git会输出一个警告，告诉你已经把GitHub的Key添加到本机的一个信任列表里了：
-
-Warning: Permanently added 'github.com' (RSA) to the list of known hosts.
-这个警告只会出现一次，后面的操作就不会有任何警告了。
-
-如果你实在担心有人冒充GitHub服务器，输入yes前可以对照GitHub的RSA Key的指纹信息是否与SSH连接给出的一致。
 
 ### 4.2 从远程仓库克隆
 
@@ -821,7 +804,6 @@ Warning: Permanently added 'github.com' (RSA) to the list of known hosts.
 - ***git push 报错 Logon failed***
   - Q：在推送至GitHub时，报错信息"Logon failed, use ctrl+c to cancel basic credential prompt."
   - 解决方法
-在
 
 
 ### Git命令列表
