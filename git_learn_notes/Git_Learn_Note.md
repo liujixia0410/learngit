@@ -72,14 +72,28 @@ $sudo make install
 
 - 配置
 
-安装完成后，还需要最后一步设置，在命令行输入：
+安装完成后，还需要最后一步设置，在命令行输入以下两行命令：
+git config --global user.name "Your Name"
+git config --global user.email "email@example.com"
 
 ```bash
-$git config --global user.name "Your Name"
-$git config --global user.email "email@example.com"
+$ git config --global user.name "Liujx"
+
+$ git config --global user.email "liujixia0410@163.com"
 ```
 
 注意git config命令的--global参数，用了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用户名和Email地址。
+
+另，以上内容记录在".gitconfig"文件中。
+
+```bash
+$ cat /c/Users/lenovo/.gitconfig
+[user]
+        name = Liujx
+        email = liujixia0410@163.com
+[gui]
+        recentrepo = Z:/Git/learngit
+```
 
 ## 第三章 版本库repository管理
 
@@ -803,8 +817,7 @@ nothing to commit, working tree clean
   - A：添加某个文件时，该文件必须在当前目录下存在。
 - ***git push 报错 Logon failed***
   - Q：在推送至GitHub时，报错信息"Logon failed, use ctrl+c to cancel basic credential prompt."
-  - 解决方法
-
+  - A：原因是GitHub通过SSH连接，***git push*** 第一次会弹出输入用户名密码窗口，输入正确之后也会弹出第二次，因为第二次才是SSh方式的，可以成功。解决方法：暂未找到
 
 ### Git命令列表
 
@@ -817,3 +830,7 @@ nothing to commit, working tree clean
 |git log|查看Git管理下的所有日志<br>--pretty=oneline：该参数简化log显示为同一行，方便查看|
 |git reset [commit_id]|版本回退|
 |git reflog|查看Git管理下所有被记录的操作|
+|git restore|撤销修改，分为以下两种情况<br>git restore \<filename\>：git add之前，撤销工作区的修改<br>git restore --stage \<filename\>：git add之后，撤销暂存区的修改|
+|git rm|删除文件|
+|git remove|将本地版本库关联远程版本库|
+|git push|将本地版本库已经提交的内容推送到远程版本库<br>首次推送增加-u参数|
