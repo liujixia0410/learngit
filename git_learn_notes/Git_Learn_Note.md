@@ -750,13 +750,46 @@ drwxr-xr-x 1 lenovo 197121     0  1月 13 16:50 image/
 
 ![image](.\image\GitHub_push_01.png)
 
-从现在起，只要本地作了提交，就可以通过命令 ***git push*** 推送到GitHub上。
+从现在起，只要本地作了提交，就可以通过命令 ***git push*** 推送到GitHub上，现在就是真正的分布式版本库了。
 
 ```bash
-$ git push origin master
-```
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
 
-把本地master分支的最新修改推送至GitHub，现在，你就拥有了真正的分布式版本库！
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   Git_Learn_Note.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+$ git add Git_Learn_Note.md
+
+$ git commit -m "Git learn: git push"
+[master 8f497b1] Git learn: git push
+ 1 file changed, 82 insertions(+)
+
+$ git push origin master
+Logon failed, use ctrl+c to cancel basic credential prompt.
+warning: redirecting to https://github.com/liujixia0410/learngit.git/
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 2.30 KiB | 336.00 KiB/s, done.
+Total 4 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To http://github.com/liujixia0410/learngit.git
+   3fb1270..8f497b1  master -> master
+
+lenovo@LAPTOP-1AA97L52 MINGW64 /z/Git/learngit/git_learn_notes (master)
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+```
 
 SSH警告
 当你第一次使用Git的clone或者push命令连接GitHub时，会得到一个警告：
@@ -785,6 +818,11 @@ Warning: Permanently added 'github.com' (RSA) to the list of known hosts.
 - ***文件不存在***
   - Q：输入**git add Git_Learn_Note.md**，得到错误fatal: pathspec 'Git_Learn_Note.md' did not match any files。
   - A：添加某个文件时，该文件必须在当前目录下存在。
+- ***git push 报错 Logon failed***
+  - Q：在推送至GitHub时，报错信息"Logon failed, use ctrl+c to cancel basic credential prompt."
+  - 解决方法
+在
+
 
 ### Git命令列表
 
