@@ -323,7 +323,7 @@ Git的版本回退速度非常快，因为Git在内部有个指向当前版本�
 
 然后顺便把工作区的文件更新了。所以你让HEAD指向哪个版本号，你就把当前版本定位在哪。
 
-#### 3.2.4 工作区和暂存区
+#### 3.2.4 工作区 & 暂存区
 
 - **工作区（Working Directory）**
 就是在电脑里能看到的目录，比如我的learngit文件夹就是一个工作区：
@@ -422,7 +422,7 @@ nothing to commit, working tree clean
 
 ![image](.\image\git_stage_after_commit.png)
 
-#### 3.2.5 管理修改
+#### 3.2.5 管理修改而非文件
 
 **问：为什么Git比其他版本控制系统设计得优秀？**
 **答：因为Git跟踪并管理的是<font color="red">修改</font>，而非文件。任何增删改，都是修改**
@@ -619,6 +619,79 @@ Git tracks changes of files 2nd.
 ```
 
 到这里，全干净了，***git status***什么也没有了，查看文件内容，"Git undo change after add."这句确实不存在了，一切都回到了原点。
+
+#### 3.2.7 删除文件 git rm
+
+Git中，删除也被当做一种修改操作来管理。我们试着删除之前曾经提交过的"git_test.txt"文件。
+
+```bash
+$ ll
+total 29
+-rw-r--r-- 1 lenovo 197121 24390  1月 19 19:36 Git_Learn_Note.md
+-rw-r--r-- 1 lenovo 197121     0  1月 13 16:40 git_test.txt
+-rw-r--r-- 1 lenovo 197121   132  1月 19 19:32 gitversion.txt
+
+$ rm git_test.txt
+
+$ ll
+total 29
+-rw-r--r-- 1 lenovo 197121 24390  1月 19 19:36 Git_Learn_Note.md
+-rw-r--r-- 1 lenovo 197121   132  1月 19 19:32 gitversion.txt
+```
+
+此时，Git知道有文件被删除了，工作区和版本库不一致了，***git status***命令会告诉哪些文件被删除了。
+
+```bash
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        deleted:    git_test.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+此时可以有两个选择
+
+1. 一是删除错了，要从版本库恢复回来，使用命令 ***git restore***
+通过以下执行，可以看到，"git_test.txt"被恢复回来了，***git status*** 也是干净的。
+
+```bash
+$ git restore git_test.txt
+
+$ ll
+total 29
+-rw-r--r-- 1 lenovo 197121 24390  1月 19 19:36 Git_Learn_Note.md
+-rw-r--r-- 1 lenovo 197121     0  1月 22 14:00 git_test.txt
+-rw-r--r-- 1 lenovo 197121   132  1月 19 19:32 gitversion.txt
+
+$ git status
+On branch master
+nothing to commit, working tree clean
+```
+
+2. 二是确实要从版本库中删除该文件，使用命令 ***git rm*** 删掉，并且 ***git commit***
+通过以下执行，可以看到，"git_test.txt"已经不存在了，并且 ***git status*** 也是干净的。
+
+```bash
+$ git rm git_test.txt
+rm 'git_learn_notes/git_test.txt'
+
+$ git commit -m "Git learn: git rm"
+[master 7398e9d] Git learn: git rm
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 git_learn_notes/git_test.txt
+
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+$ ll
+total 29
+-rw-r--r-- 1 lenovo 197121 24390  1月 19 19:36 Git_Learn_Note.md
+-rw-r--r-- 1 lenovo 197121   132  1月 19 19:32 gitversion.txt
+```
 
 ## 附录
 
