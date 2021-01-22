@@ -693,6 +693,88 @@ total 29
 -rw-r--r-- 1 lenovo 197121   132  1月 19 19:32 gitversion.txt
 ```
 
+## 第四章 远程版本库
+
+GitHub也可以创建Git仓库，并且让GitHub与本地仓库进行远程同步，这样，GitHub上的仓库既可以作为备份，又可以让其他人通过该仓库来协作。
+
+### 4.1 添加到远程仓库
+
+首先，注册并登录GitHub，创建一个仓库。我针对Git学习，创建一个叫做learngit的仓库。创建后，仓库是空的。
+
+GitHub给出了很明确的提示，可以从这个仓库克隆出新的仓库，也可以把一个已有的本地仓库与之关联，然后，把本地仓库的内容推送到GitHub仓库。
+
+GitHub提示信息如下：
+
+![image](.\image\GitHub_new_repo.png)
+
+现在，根据GitHub的提示，在本地的learngit仓库下运行命令：
+
+```bash
+$ git remote add origin http://github.com/liujixia0410/learngit.git
+```
+
+上面的liujixia0410需要替换成自己的GitHub账户名，否则，你在本地关联的就是我的远程库，关联没有问题，但是你以后推送是推不上去的，因为你的SSH Key公钥不在我的账户列表中。
+
+添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的，但是origin这个名字一看就知道是远程库。
+
+下一步，就可以把本地库的所有内容推送到远程库上：
+
+```bash
+$ git push -u origin master
+warning: redirecting to https://github.com/liujixia0410/learngit.git/
+Enumerating objects: 79, done.
+Counting objects: 100% (79/79), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (55/55), done.
+Writing objects: 100% (79/79), 193.28 KiB | 7.73 MiB/s, done.
+Total 79 (delta 16), reused 0 (delta 0)
+remote: Resolving deltas: 100% (16/16), done.
+To http://github.com/liujixia0410/learngit.git
+ * [new branch]      master -> master
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+```
+
+把本地库的内容推送到远程，用 ***git push*** 命令，实际上是把当前分支master推送到远程。
+
+由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
+
+推送成功后的Git页面，与本地一样了。
+
+```bash
+$ ll
+total 33
+-rw-r--r-- 1 lenovo 197121 26672  1月 22 15:07 Git_Learn_Note.md
+-rw-r--r-- 1 lenovo 197121   132  1月 19 19:32 gitversion.txt
+drwxr-xr-x 1 lenovo 197121     0  1月 13 16:50 image/
+```
+
+![image](.\image\GitHub_push_01.png)
+
+从现在起，只要本地作了提交，就可以通过命令 ***git push*** 推送到GitHub上。
+
+```bash
+$ git push origin master
+```
+
+把本地master分支的最新修改推送至GitHub，现在，你就拥有了真正的分布式版本库！
+
+SSH警告
+当你第一次使用Git的clone或者push命令连接GitHub时，会得到一个警告：
+
+The authenticity of host 'github.com (xx.xx.xx.xx)' can't be established.
+RSA key fingerprint is xx.xx.xx.xx.xx.
+Are you sure you want to continue connecting (yes/no)?
+这是因为Git使用SSH连接，而SSH连接在第一次验证GitHub服务器的Key时，需要你确认GitHub的Key的指纹信息是否真的来自GitHub的服务器，输入yes回车即可。
+
+Git会输出一个警告，告诉你已经把GitHub的Key添加到本机的一个信任列表里了：
+
+Warning: Permanently added 'github.com' (RSA) to the list of known hosts.
+这个警告只会出现一次，后面的操作就不会有任何警告了。
+
+如果你实在担心有人冒充GitHub服务器，输入yes前可以对照GitHub的RSA Key的指纹信息是否与SSH连接给出的一致。
+
+### 4.2 从远程仓库克隆
+
 ## 附录
 
 ### Q&A
