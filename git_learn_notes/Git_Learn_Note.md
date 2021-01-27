@@ -172,14 +172,14 @@ nothing to commit
 - ***git status***
 用于查看文件修改的状态，当前Git_Learn_Note.md已经被修改过，我们通过 **git status** 看看会告诉我们什么？
 
-![image](.\image\git_status_01.png)
+![git_status_01](https://cdn.jsdelivr.net/gh/liujixia0410/learngit@master/git_learn_notes/image/git_status_01.png)
 
 **git status**命令可以让我们时刻掌握仓库当前的状态，上面的命令输出告诉我们，Git_Learn_Note.md被修改过了(modified:   Git_Learn_Note.md)，但还没有准备提交的修改(no changes added to commit)。
 
 - ***git diff***
 虽然Git告诉我们Git_Learn_Note.md被修改了，但如果能看看具体修改了什么内容，自然是很好的。比如你休假两周从国外回来，第一天上班时，已经记不清上次怎么修改的Git_Learn_Note.md，所以，需要用git diff这个命令看看：
 
-![image](.\image\git_diff_01.png)
+![git_diff_01](https://cdn.jsdelivr.net/gh/liujixia0410/learngit@master/git_learn_notes/image/git_diff_01.png)
 
 **git diff** 顾名思义就是查看difference，显示的格式是Unix通用的diff格式，可以从上面的命令输出看到，我们在第186行删除了“疑难解答”四个字。
 
@@ -363,7 +363,7 @@ drwxr-xr-x 1 lenovo 197121     0  1月 13 10:42 image/
 Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，还有Git为我们自动创建的第一个分支master，以及指向master的一个指针叫HEAD。
 （分支和HEAD的概念后面再说）
 
-![image](.\image\git_repository.png)
+![git_repository](https://cdn.jsdelivr.net/gh/liujixia0410/learngit@master/git_learn_notes/image/git_repository.png)
 
 前面讲了我们把文件往Git版本库里添加的时候，是分两步执行的：
 第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区；
@@ -413,7 +413,7 @@ Changes to be committed:
 
 现在，暂存区的状态就变成这样了：
 
-![image](.\image\git_stage.png)
+![git_stage](https://cdn.jsdelivr.net/gh/liujixia0410/learngit@master/git_learn_notes/image/git_stage.png)
 
 所以，***git add*** 命令实际上就是把要提交的所有修改放到 **暂存区（Stage）**，然后，执行 ***git commit*** 就可以一次性把暂存区的所有修改提交到分支。
 
@@ -434,7 +434,7 @@ nothing to commit, working tree clean
 
 现在版本库变成了这样，暂存区就没有任何内容了：
 
-![image](.\image\git_stage_after_commit.png)
+![git_stage_after_commit](https://cdn.jsdelivr.net/gh/liujixia0410/learngit@master/git_learn_notes/image/git_stage_after_commit.png)
 
 #### 3.2.5 管理修改而非文件
 
@@ -711,7 +711,7 @@ total 29
 
 GitHub也可以创建Git仓库，并且让GitHub与本地仓库进行远程同步，这样，GitHub上的仓库既可以作为备份，又可以让其他人通过该仓库来协作。
 
-### 4.1 添加到远程仓库
+### 4.1 添加到远程仓库 git remote & git push
 
 首先，注册并登录GitHub，创建一个仓库。我针对Git学习，创建一个叫做learngit的仓库。创建后，仓库是空的。
 
@@ -719,7 +719,7 @@ GitHub给出了很明确的提示，可以从这个仓库克隆出新的仓库�
 
 GitHub提示信息如下：
 
-![image](.\image\GitHub_new_repo.png)
+![GitHub_new_repo](https://cdn.jsdelivr.net/gh/liujixia0410/learngit@master/git_learn_notes/image/GitHub_new_repo.png)
 
 现在，根据GitHub的提示，在本地的learngit仓库下运行命令：
 
@@ -762,7 +762,7 @@ total 33
 drwxr-xr-x 1 lenovo 197121     0  1月 13 16:50 image/
 ```
 
-![image](.\image\GitHub_push_01.png)
+![GitHub_push_01](https://cdn.jsdelivr.net/gh/liujixia0410/learngit@master/git_learn_notes/image/GitHub_push_01.png)
 
 从现在起，只要本地作了提交，就可以通过命令 ***git push*** 推送到GitHub上，现在就是真正的分布式版本库了。
 
@@ -803,7 +803,45 @@ Your branch is up to date with 'origin/master'.
 nothing to commit, working tree clean
 ```
 
-### 4.2 从远程仓库克隆
+### 4.2 从远程仓库克隆 git clone
+
+现在，假设我们先有一个远程库，然后，从远程库克隆。
+
+首先，登陆GitHub，创建一个新的仓库，名字叫gitremotetest，勾选
+
+```
+Initialize this repository with a README
+```
+
+这样GitHub会自动为我们创建一个README.md文件。创建完毕后，可以看到README.md文件。
+
+现在，远程库已经准备好了，使用命令 ***git clone*** 克隆一个本地库。
+
+```bash
+$ ll
+total 57
+-rwxr-xr-x 1 lenovo 197121  5114 12月 14 19:57 github.sh*
+drwxr-xr-x 1 lenovo 197121     0  1月 11 20:32 learngit/
+
+$ git clone git@github.com:liujixia0410/gitremotetest.git
+Cloning into 'gitremotetest'...
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+Receiving objects: 100% (3/3), done.
+
+$ ll
+total 57
+-rwxr-xr-x 1 lenovo 197121  5114 12月 14 19:57 github.sh*
+drwxr-xr-x 1 lenovo 197121     0  1月 23 22:27 gitremotetest/
+drwxr-xr-x 1 lenovo 197121     0  1月 11 20:32 learngit/
+```
+
+GitHub给出的地址不止一个，还可以用 https://github.com/michaelliao/gitskills.git 这样的地址。实际上，Git支持多种协议，默认的 git:// 使用ssh，但也可以使用https等其他协议。
+
+使用https除了速度慢以外，还有个最大的麻烦是每次推送都必须输入口令，但是在某些只开放http端口的公司内部就无法使用ssh协议而只能用https。
+
+## 第五章 分支管理
 
 ## 附录
 
@@ -817,7 +855,7 @@ nothing to commit, working tree clean
   - A：添加某个文件时，该文件必须在当前目录下存在。
 - ***git push 报错 Logon failed***
   - Q：在推送至GitHub时，报错信息"Logon failed, use ctrl+c to cancel basic credential prompt."
-  - A：原因是GitHub通过SSH连接，***git push*** 第一次会弹出输入用户名密码窗口，输入正确之后也会弹出第二次，因为第二次才是SSh方式的，可以成功。解决方法：暂未找到
+  - A：连续输入两次账户密码，第一次HTTP仍然会报错，第二次会变成OpenSSH，就成功了。原因暂未了解。
 
 ### Git命令列表
 
